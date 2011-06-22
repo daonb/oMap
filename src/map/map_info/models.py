@@ -2,23 +2,8 @@
 Models and Manager for map information
 ======================================
 
->>> miki= User.objects.create_user('miki', 'miki', 'miki')
->>> layer=Layer.objects.create(name='first layer', description='This is the first layer',owner=miki)
->>> point=SimplePoint.objects.create(name='a point', description='This is the first point', layer=layer,
->>>                                  owner=miki, point=...)
->>> points=layer.points.all()
->>> points.count()
-1
->>> points[0].name
-a point
->>> areas=layer.areas.all()
->>> areas.count()
-0
->>> area=SimpleArea.objects.create(name='an area', description='This is the first area', layer=layer, 
-                                   polygon=....)
->>> areas.count()
-1
 """
+from datetime import datetime
 
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
@@ -83,12 +68,13 @@ class Point(models.Model):
     user = models.ForeignKey(User, related_name='points')
     point = models.PointField()
     date_added = models.DateField(auto_now_add=True)
-    report_date = models.DateField()
-    address = models.TextField()
+    report_date = models.DateField(default=datetime.now)
+    address = models.TextField(blank=True)
     subject = models.TextField()
     description = models.TextField()
-    file = models.FilePathField()
-    views_count = models.IntegerField()
+    #TODO: `file` is a reserved word
+    file = models.FilePathField(blank=True)
+    views_count = models.IntegerField(default=0)
     objects = models.GeoManager()
 
      #TODO  add more fields and base methods
