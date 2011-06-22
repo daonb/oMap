@@ -16,14 +16,15 @@ def main(request):
 
     all_points = list(Point.objects.all())
     most_recent = list(Point.objects.all().order_by('-date_added')[0:3])
+    # TODO: hot topis must be smarter than this
     hot_topics = list(Point.objects.all().order_by('-views_count')[0:3])
     if request.user.is_authenticated():
         user = request.user
     else:
         user = None
     dict = {'user': user, 'points': all_points, 'most_recent': most_recent, 'hot_topics' : hot_topics}
+    #TODO: the `site/` seems redundent - consider removing
     return render_to_response('site/index.html',  RequestContext(request,dict))
-
 
 def add_point(request):
     """ handles new data addition.
